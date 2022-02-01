@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH -J ocp-data
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -p clxap
+#SBATCH -t 03:00:00
+
+# activate environment
+source /home/${USER}/.bashrc
+conda activate ocp-ccl
+
+# get the training data
+python download_data.py --task is2re
