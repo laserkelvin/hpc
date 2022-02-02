@@ -250,6 +250,9 @@ class EnergyTrainer(BaseTrainer):
                 skip_steps = start_epoch % len(self.train_loader)
             train_loader_iter = iter(self.train_loader)
 
+            if self.is_profiling:
+                self.prof.start()
+
             for i in range(skip_steps, len(self.train_loader)):
                 self.model.train()
                 current_epoch = epoch + (i + 1) / len(self.train_loader)
@@ -265,6 +268,9 @@ class EnergyTrainer(BaseTrainer):
                 loss = self.scaler.scale(loss) if self.scaler else loss
                 self._backward(loss)
                 scale = self.scaler.get_scale() if self.scaler else 1.0
+
+                if self.is_profiling:
+                    self.prof.step()
 
                 # Compute metrics.
                 self.metrics = self._compute_metrics(
@@ -348,6 +354,8 @@ class EnergyTrainer(BaseTrainer):
                     self.scheduler.step()
 
             torch.cuda.empty_cache()
+        if self.is_profiling:
+            self.prof.stop()
 
         self.train_dataset.close_db()
         if "val_dataset" in self.config:
