@@ -107,3 +107,6 @@ Local
 
 # PyCharm
 .idea/
+
+# slurm output
+*.out
