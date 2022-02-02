@@ -26,7 +26,7 @@ from tqdm import tqdm
 import ocpmodels
 from ocpmodels.common import distutils
 from ocpmodels.common.data_parallel import OCPDataParallel
-from ocpmodels.common.logger import TensorboardLogger, WandBLogger
+from ocpmodels.common.logger import TensorboardLogger, WandBLogger, run_lscpu
 from ocpmodels.common.meter import Meter
 from ocpmodels.common.registry import registry
 from ocpmodels.common.utils import (
@@ -302,6 +302,7 @@ class BaseTrainer(ABC):
             )
 
         if self.logger is not None:
+            self.logger.writer.add_text("lscpu", run_lscpu())
             self.logger.watch(self.model)
 
         self.model = OCPDataParallel(
