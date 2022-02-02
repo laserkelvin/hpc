@@ -239,7 +239,7 @@ class BaseTrainer(ABC):
     def setup_profiler(self):
         if distutils.is_master():
             self.prof = profiler.profile(
-                schedule=profiler.schedule(wait=0, warmup=0, active=4, repeat=2),
+                schedule=profiler.schedule(wait=0, warmup=0, active=10, repeat=2),
                 on_trace_ready=profiler.tensorboard_trace_handler("./logs/profiling"),
                 record_shapes=True,
                 profile_memory=True,
@@ -313,6 +313,10 @@ class BaseTrainer(ABC):
             self.model = DistributedDataParallel(
                 self.model, device_ids=[self.device]
             )
+
+        # if we're logging and profiling, add the graph to logs
+        if self.logger is not None and self.is_profiling:
+            self.logger.writer.add_graph(self.model)
 
     def load_pretrained(self, checkpoint_path=None, ddp_to_dp=False):
         if checkpoint_path is None or os.path.isfile(checkpoint_path) is False:
