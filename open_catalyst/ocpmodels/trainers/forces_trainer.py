@@ -364,13 +364,13 @@ class ForcesTrainer(BaseTrainer):
         self.metrics = {}
 
         start_epoch = self.start_step // len(self.train_loader)
-        print(
-            f"Starting epoch {start_epoch} "
-            + f"train batches {len(self.train_loader)} "
-            + f"samples {len(self.train_loader.sampler)} "
-            + f"valid batches {len(self.val_loader)} "
-            + f"samples {len(self.val_loader.sampler)}"
-        )
+        #print(
+        #    f"Starting epoch {start_epoch} "
+        #    + f"train batches {len(self.train_loader)} "
+        #    + f"samples {len(self.train_loader.sampler)} "
+        #    + f"valid batches {len(self.val_loader)} "
+        #    + f"samples {len(self.val_loader.sampler)}"
+        #)
         # start profiler
         if self.is_profiling:
             self.prof.start()
