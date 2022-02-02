@@ -246,6 +246,11 @@ class BaseTrainer(ABC):
         else:
             self.prof = None
 
+    @property
+    def is_profiling(self) -> bool:
+        # convenient way to encapsulate when we should profile
+        return hasattr(self, "prof") and distutils.is_master()
+
     def load_logger(self):
         self.logger = None
         if not self.is_debug and distutils.is_master() and not self.is_hpo:
