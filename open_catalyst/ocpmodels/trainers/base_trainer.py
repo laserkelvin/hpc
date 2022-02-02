@@ -242,7 +242,6 @@ class BaseTrainer(ABC):
                 schedule=profiler.schedule(wait=0, warmup=0, active=10, repeat=2),
                 on_trace_ready=profiler.tensorboard_trace_handler("./logs/profiling"),
                 record_shapes=True,
-                profile_memory=True,
                 with_stack=True)
         else:
             self.prof = None
