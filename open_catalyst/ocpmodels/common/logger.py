@@ -10,6 +10,13 @@ import wandb
 from ocpmodels.common.registry import registry
 from torch.utils.tensorboard import SummaryWriter
 
+from subprocess import run, PIPE
+
+
+def run_lscpu() -> str:
+    result = run("lscpu", stdout=PIPE, stderr=PIPE)
+    return result.stdout.decode("utf-8")
+
 
 class Logger:
     """Generic class to interface with various logging modules, e.g. wandb,
