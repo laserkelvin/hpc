@@ -240,7 +240,7 @@ class BaseTrainer(ABC):
         if distutils.is_master():
             self.prof = profiler.profile(
                 schedule=profiler.schedule(wait=0, warmup=0, active=4, repeat=2),
-                on_trace_ready=profiler.tensorboard_trace_handler("./profiles"),
+                on_trace_ready=profiler.tensorboard_trace_handler("./logs/profiling"),
                 record_shapes=True,
                 with_stack=True)
         else:
