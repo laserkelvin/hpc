@@ -371,6 +371,10 @@ class ForcesTrainer(BaseTrainer):
             + f"valid batches {len(self.val_loader)} "
             + f"samples {len(self.val_loader.sampler)}"
         )
+        # start profiler
+        if self.is_profiling:
+            self.prof.start()
+
         for epoch in range(start_epoch, self.config["optim"]["max_epochs"]):
             self.train_sampler.set_epoch(epoch)
             skip_steps = 0
@@ -404,6 +408,9 @@ class ForcesTrainer(BaseTrainer):
                 self.metrics = self.evaluator.update(
                     "loss", loss.item() / scale, self.metrics
                 )
+                # if we want to profile, do it here
+                if self.is_profiling:
+                    self.prof.step()
 
                 # Log metrics.
                 log_dict = {k: self.metrics[k]["metric"] for k in self.metrics}
@@ -483,6 +490,8 @@ class ForcesTrainer(BaseTrainer):
                     self.scheduler.step()
 
             torch.cuda.empty_cache()
+        if self.is_profiling:
+            self.prof.stop()
 
         self.train_dataset.close_db()
         if "val_dataset" in self.config:
