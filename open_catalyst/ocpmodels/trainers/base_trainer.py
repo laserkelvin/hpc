@@ -15,6 +15,7 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from torch import profiler
 import torch.nn as nn
 import torch.optim as optim
 import yaml
@@ -160,6 +161,8 @@ class BaseTrainer(ABC):
     def load(self):
         self.load_seed_from_config()
         self.load_logger()
+        # TODO add statement to disable profiling
+        self.setup_profiler()
         self.load_task()
         self.load_model()
         self.load_criterion()
@@ -232,6 +235,16 @@ class BaseTrainer(ABC):
         torch.cuda.manual_seed_all(seed)
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
+
+    def setup_profiler(self):
+        if distutils.is_master():
+            self.prof = profiler.profile(
+                schedule=profiler.schedule(wait=0, warmup=0, active=4, repeat=2),
+                on_trace_ready=profiler.tensorboard_trace_handler("./profiles"),
+                record_shapes=True,
+                with_stack=True)
+        else:
+            self.prof = None
 
     def load_logger(self):
         self.logger = None
