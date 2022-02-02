@@ -309,7 +309,7 @@ class BaseTrainer(ABC):
             self.model,
             output_device=self.device,
             num_gpus=1 if not self.cpu else 0,
-        )
+       )
         if distutils.initialized():
             self.model = DistributedDataParallel(
                 self.model, device_ids=[self.device]
@@ -317,7 +317,8 @@ class BaseTrainer(ABC):
 
         # if we're logging and profiling, add the graph to logs
         if self.logger is not None and self.is_profiling:
-            self.logger.writer.add_graph(self.model)
+            self.logger.writer.add_text("model", str(self.model))
+            #self.logger.writer.add_graph(self.model, None, True, False)
 
     def load_pretrained(self, checkpoint_path=None, ddp_to_dp=False):
         if checkpoint_path is None or os.path.isfile(checkpoint_path) is False:
