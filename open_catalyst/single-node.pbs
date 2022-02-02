@@ -1,0 +1,12 @@
+#!/bin/bash
+#SBATCH -J snode-ocp-train
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH -t 12:00:00
+#SBATCH -p clxap
+
+# activate environment
+source /home/${USER}/.bashrc
+conda activate ocp-ccl
+
+python main.py --mode train --config configs/s2ef/200k/schnet/schnet.yml
