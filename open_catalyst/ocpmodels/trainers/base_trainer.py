@@ -26,8 +26,12 @@ from tqdm import tqdm
 import ocpmodels
 from ocpmodels.common import distutils
 from ocpmodels.common.data_parallel import OCPDataParallel
-from ocpmodels.common.logger import TensorboardLogger, WandBLogger, run_lscpu,
-get_profile_vars
+from ocpmodels.common.logger import (
+    TensorboardLogger,
+    WandBLogger,
+    run_lscpu,
+    get_profile_vars
+)
 from ocpmodels.common.meter import Meter
 from ocpmodels.common.registry import registry
 from ocpmodels.common.utils import (
