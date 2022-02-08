@@ -26,7 +26,8 @@ from tqdm import tqdm
 import ocpmodels
 from ocpmodels.common import distutils
 from ocpmodels.common.data_parallel import OCPDataParallel
-from ocpmodels.common.logger import TensorboardLogger, WandBLogger, run_lscpu
+from ocpmodels.common.logger import TensorboardLogger, WandBLogger, run_lscpu,
+get_profile_vars
 from ocpmodels.common.meter import Meter
 from ocpmodels.common.registry import registry
 from ocpmodels.common.utils import (
@@ -303,7 +304,11 @@ class BaseTrainer(ABC):
             )
 
         if self.logger is not None:
+            # get the CPU information
             self.logger.writer.add_text("lscpu", run_lscpu())
+            # get relevant environment variables like OMP_NUM_THREADS
+            for key, value in get_profile_vars().items():
+                self.logger.writer.add_text(key, value)
             self.logger.watch(self.model)
 
         self.model = OCPDataParallel(
