@@ -25,7 +25,7 @@ def get_profile_vars():
         "LD_PRELOAD",
         "KMP_AFFINITY",
         ]
-    result = {key: os.environ.get(key) for key in keys}
+    result = {key: os.environ.get(key, "") for key in keys}
     return result
 
 
