@@ -10,12 +10,23 @@ import wandb
 from ocpmodels.common.registry import registry
 from torch.utils.tensorboard import SummaryWriter
 
+import os
 from subprocess import run, PIPE
 
 
 def run_lscpu() -> str:
     result = run("lscpu", stdout=PIPE, stderr=PIPE)
     return result.stdout.decode("utf-8")
+
+
+def get_profile_vars():
+    keys = [
+        "OMP_NUM_THREADS",
+        "LD_PRELOAD",
+        "KMP_AFFINITY",
+        ]
+    result = {key: os.environ.get(key) for key in keys}
+    return result
 
 
 class Logger:
