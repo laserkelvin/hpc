@@ -254,10 +254,11 @@ class DimeNetPlusPlus(torch.nn.Module):
 
         self.num_blocks = num_blocks
 
-        self.rbf = BesselBasisLayer(num_radial, cutoff, envelope_exponent)
-        self.sbf = SphericalBasisLayer(
-            num_spherical, num_radial, cutoff, envelope_exponent
-        )
+        with torch.no_grad():
+            self.rbf = BesselBasisLayer(num_radial, cutoff, envelope_exponent)
+            self.sbf = SphericalBasisLayer(
+                num_spherical, num_radial, cutoff, envelope_exponent
+            )
 
         self.emb = EmbeddingBlock(num_radial, hidden_channels, act)
 
