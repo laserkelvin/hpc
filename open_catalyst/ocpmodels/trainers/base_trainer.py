@@ -321,8 +321,12 @@ class BaseTrainer(ABC):
             num_gpus=1 if not self.cpu else 0,
        )
         if distutils.initialized():
+            if self.cpu:
+                device_ids = None
+            else:
+                device_ids = [self.device]
             self.model = DistributedDataParallel(
-                self.model, device_ids=[self.device]
+                self.model, device_ids=device_ids
             )
 
         # if we're logging and profiling, add the graph to logs
