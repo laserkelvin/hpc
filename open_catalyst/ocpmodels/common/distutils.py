@@ -78,11 +78,13 @@ def initialized():
 
 
 def get_rank():
-    return dist.get_rank() if initialized() else 0
+    rank = int(os.environ.get("LOCAL_RANK", 0))
+    return rank if initialized() else 0
 
 
 def get_world_size():
-    return dist.get_world_size() if initialized() else 1
+    world_size = int(os.environ.get("LOCAL_WORLD_SIZE", 1))
+    return world_size if initialized() else 1
 
 
 def is_master():
@@ -107,7 +109,7 @@ def all_reduce(data, group=dist.group.WORLD, average=False, device=None):
     tensor = data
     if not isinstance(data, torch.Tensor):
         tensor = torch.tensor(data)
-    if device is not None:
+    if device is not None and tensor.device != "cpu":
         tensor = tensor.cuda(device)
     dist.all_reduce(tensor, group=group)
     if average:
