@@ -154,4 +154,6 @@ if __name__ == "__main__":
     if restart:
         previous_runs = load_previous()
         iterator = list_differences(previous_runs, iterator)
+    else:
+        previous_runs = None
     main(iterator, previous_runs)
