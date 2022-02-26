@@ -244,7 +244,7 @@ class BaseTrainer(ABC):
     def setup_profiler(self):
         if distutils.is_master():
             self.prof = profiler.profile(
-                schedule=profiler.schedule(wait=0, warmup=4, active=10, repeat=10),
+                schedule=profiler.schedule(wait=0, warmup=4, active=3, repeat=2),
                 on_trace_ready=profiler.tensorboard_trace_handler(
                     self.config["cmd"]["logs_dir"]
                 ),

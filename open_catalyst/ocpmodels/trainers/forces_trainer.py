@@ -382,7 +382,7 @@ class ForcesTrainer(BaseTrainer):
                 skip_steps = start_epoch % len(self.train_loader)
             train_loader_iter = iter(self.train_loader)
 
-            for i in range(skip_steps, 100):
+            for i in range(skip_steps, 50):
                 self.model.train()
                 current_epoch = epoch + (i + 1) / len(self.train_loader)
                 current_step = epoch * len(self.train_loader) + (i + 1)
